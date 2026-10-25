@@ -1,0 +1,13 @@
+# Configures pytest for the contract, so that this directory is the rootdir and
+# `pytest --due-work-verify` reads the coverage table below. Not an installable project.
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+addopts = ["--due-work-check-fixtures", "-p", "no:cacheprovider", "-rxX"]
+pythonpath = ["../.."]
+
+# The handoff sites in django-tasks-db's own code that the contract must cover.
+[tool.due-work-harness]
+production-packages = ["django_tasks_db"]
+source-roots = ["../.."]
+test-paths = ["."]
