@@ -33,8 +33,8 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres python -m pyte
 
 - [RealOrangeOne/django-tasks-db#62](https://github.com/RealOrangeOne/django-tasks-db/issues/62):
   a `task_finished` receiver that raised rewrote a task that had run as FAILED. Fixed on `master`
-  by [#64](https://github.com/RealOrangeOne/django-tasks-db/pull/64); the contract saw the fix
-  without being told about it.
+  by [#64](https://github.com/RealOrangeOne/django-tasks-db/pull/64); the contract's findings
+  table records the fixed behaviour (the task stays SUCCESSFUL).
 - [RealOrangeOne/django-tasks-db#5](https://github.com/RealOrangeOne/django-tasks-db/issues/5)
   (open, reported before this fork): a task whose worker died stays RUNNING forever.
 
