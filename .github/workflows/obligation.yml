@@ -1,5 +1,6 @@
 # gigaverse-app/django-tasks-db-obligation: django-tasks-db's worker checked with a
 # pytest-obligation contract in tests/obligation.
+# As a canary, the package and its reporting actions intentionally track main.
 #
 # Two lanes: this fork's own code, and django-tasks-db's current master (its django_tasks_db/
 # package checked out over this fork's), nightly and on demand. A change in what any failure
@@ -112,7 +113,7 @@ jobs:
         run: python -m pytest tests/obligation --due-work-verify --due-work-require-assessed --due-work-profile-report=obligation-profiles.json
       - name: Report what the contract proved
         if: ${{ !cancelled() }}
-        uses: gigaverse-app/pytest-obligation/report@v1
+        uses: gigaverse-app/pytest-obligation/report@main
         with:
           application-paths: tests/obligation
           report-path: obligation-profiles.json
@@ -147,8 +148,7 @@ jobs:
         id: lane
         run: echo "outcome=$(jq -r .test_outcome evidence/manifest.json)" >> "$GITHUB_OUTPUT"
       - name: Render the report into the README and the badge
-        # Unreleased: readme-path and badge-path (gigaverse-app/pytest-obligation#171); v1 once released.
-        uses: gigaverse-app/pytest-obligation/report@d2b281e2138d5c80b9af867804d2c69cb81731b8
+        uses: gigaverse-app/pytest-obligation/report@main
         with:
           application-paths: tests/obligation
           report-path: evidence/reports/*.json
