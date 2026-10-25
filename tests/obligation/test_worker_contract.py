@@ -61,14 +61,15 @@ WORKER_FINDINGS: dict[str, TaskOutcome] = {
     "worker died after commit 3": _task("SUCCESSFUL", 1),
     # FINDING (#5): the message was sent and the task stays RUNNING forever.
     "worker died after external call 1": _task("RUNNING", 1),
-    # FINDING: task_started's receiver raised, so the task is FAILED without running, and nothing retries it.
+    # FINDING (#67): task_started's receiver raised, so the task is FAILED without running, and nothing retries it.
     "signal receiver 1 failed": _task("FAILED", 0),
 }
 
 WORKER_HISTORY_GAP = (
     "a worker that dies after claiming the task, or after its external call, leaves it RUNNING forever "
     "(https://github.com/RealOrangeOne/django-tasks-db/issues/5); and a task_started receiver that raises "
-    "marks the task FAILED before it runs, and nothing retries it. WORKER_FINDINGS pins each history"
+    "marks the task FAILED before it runs, and nothing retries it "
+    "(https://github.com/RealOrangeOne/django-tasks-db/issues/67). WORKER_FINDINGS pins each history"
 )
 
 _CONTRACT = worker_contract(

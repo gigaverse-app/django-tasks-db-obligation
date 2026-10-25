@@ -155,15 +155,15 @@ READY_TASKS = ScheduledSelection(
         ),
         "assert_inadmissible_owed_row_does_not_block_the_next[task-queue_name-blank]": (
             "The all-queues worker selects an empty queue name. Its error handler reconstructs the invalid "
-            "task and raises InvalidTask, abandoning the healthy task behind it."
+            "task and raises InvalidTask, abandoning the healthy task behind it: https://github.com/RealOrangeOne/django-tasks-db/issues/66"
         ),
         "assert_inadmissible_owed_row_does_not_block_the_next[task-queue_name-whitespace]": (
             "The all-queues worker claims a whitespace queue name, then InvalidTask from error reporting "
-            "aborts the tick before the healthy task behind it."
+            "aborts the tick before the healthy task behind it: https://github.com/RealOrangeOne/django-tasks-db/issues/66"
         ),
         "assert_inadmissible_owed_row_does_not_block_the_next[task-queue_name-max_length]": (
             "A database-legal but unconfigured 32-character queue name is selected by the all-queues worker. "
-            "Error reporting raises InvalidTask and aborts before the healthy tail."
+            "Error reporting raises InvalidTask and aborts before the healthy tail: https://github.com/RealOrangeOne/django-tasks-db/issues/66"
         ),
         "assert_one_poisoned_identity_does_not_stall_the_tick[dropped]": (
             "Worker.run_task catches the receiver failure and makes the task FAILED. The healthy tail completes, "

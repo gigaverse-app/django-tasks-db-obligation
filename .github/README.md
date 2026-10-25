@@ -37,6 +37,12 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres python -m pyte
   table records the fixed behaviour (the task stays SUCCESSFUL).
 - [RealOrangeOne/django-tasks-db#5](https://github.com/RealOrangeOne/django-tasks-db/issues/5)
   (open, reported before this fork): a task whose worker died stays RUNNING forever.
+- [RealOrangeOne/django-tasks-db#66](https://github.com/RealOrangeOne/django-tasks-db/issues/66)
+  (open): `db_worker --queue-name '*'` exits on a task whose queue is no longer configured, and the
+  tasks behind it are not run.
+- [RealOrangeOne/django-tasks-db#67](https://github.com/RealOrangeOne/django-tasks-db/issues/67)
+  (open): a `task_started` receiver that raises records the task as FAILED with the receiver's
+  error, and the task never runs.
 
 ## What the contract finds in django-tasks-db's master
 
