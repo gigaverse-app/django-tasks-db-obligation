@@ -170,7 +170,7 @@ Ticket not reported.
 
 </details>
 
-Application reason: The all-queues worker selects an empty queue name. Its error handler reconstructs the invalid task and raises InvalidTask, abandoning the healthy task behind it.
+Application reason: The all-queues worker selects an empty queue name. Its error handler reconstructs the invalid task and raises InvalidTask, abandoning the healthy task behind it: https://github.com/RealOrangeOne/django-tasks-db/issues/66
 
 Ticket not reported.
 
@@ -182,7 +182,7 @@ Ticket not reported.
 
 </details>
 
-Application reason: The all-queues worker claims a whitespace queue name, then InvalidTask from error reporting aborts the tick before the healthy task behind it.
+Application reason: The all-queues worker claims a whitespace queue name, then InvalidTask from error reporting aborts the tick before the healthy task behind it: https://github.com/RealOrangeOne/django-tasks-db/issues/66
 
 Ticket not reported.
 
@@ -194,7 +194,7 @@ Ticket not reported.
 
 </details>
 
-Application reason: A database-legal but unconfigured 32-character queue name is selected by the all-queues worker. Error reporting raises InvalidTask and aborts before the healthy tail.
+Application reason: A database-legal but unconfigured 32-character queue name is selected by the all-queues worker. Error reporting raises InvalidTask and aborts before the healthy tail: https://github.com/RealOrangeOne/django-tasks-db/issues/66
 
 Ticket not reported.
 
@@ -243,7 +243,7 @@ Suite (application code): <code>tests.obligation.test&#95;worker&#95;rows.TestDa
 <details>
 <summary><samp title="django-tasks-db: the worker running a task"><strong>django-tasks-db: th…</strong></samp><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-9-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-9-light.svg" width="8" height="16" alt="9 passed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-passed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-passed-light.svg" width="37" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="37" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/divider-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/divider-light.svg" width="1" height="22" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="12" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/bad-5-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/bad-5-light.svg" width="8" height="16" alt="5 failed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-failed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-failed-light.svg" width="33" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="40" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 blocked" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-blocked-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-blocked-light.svg" width="44" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="36" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/warning-3-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/warning-3-light.svg" width="8" height="16" alt="3 gaps" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-gaps-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-gaps-light.svg" width="27" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="39" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 rejected" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-rejected-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/label-rejected-light.svg" width="48" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/d2b281e2138d5c80b9af867804d2c69cb81731b8/docs/assets/report-glyphs/space.svg" width="34" height="18" alt="" align="middle"></picture></summary>
 
-Contract contract setup: <code>tests/obligation/test&#95;worker&#95;contract.py:84</code>
+Contract contract setup: <code>tests/obligation/test&#95;worker&#95;contract.py:85</code>
 
 Application: <code>django-tasks-db: the worker running a task</code>
 
@@ -260,7 +260,7 @@ Ticket not reported.
 - <code>A-known&#95;gap</code>: Known expected failure
 - **call:** Failed: the worker selects only READY tasks, so a task left RUNNING by a worker that died is never run again (django-tasks-db#5)
 - <code>extra-a task whose worker died is run again by what django-tasks-db runs</code>: Known expected failure
-- **call:** AssertionError: a stranded row (&#x27;9d4e7c4c-af8c-4bc6-997e-4081d31271f8&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;9d4e7c4c-af8c-4bc6-997e-4081d31271f8&#x27; in &#91;&#93;
+- **call:** AssertionError: a stranded row (&#x27;7126c082-02d7-4459-93c7-ebd065a291b2&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;7126c082-02d7-4459-93c7-ebd065a291b2&#x27; in &#91;&#93;
 
 </details>
 
@@ -288,7 +288,7 @@ Ticket not reported.
 
 </details>
 
-Application reason: a worker that dies after claiming the task, or after its external call, leaves it RUNNING forever (https://github.com/RealOrangeOne/django-tasks-db/issues/5); and a task&#95;started receiver that raises marks the task FAILED before it runs, and nothing retries it. WORKER&#95;FINDINGS pins each history
+Application reason: a worker that dies after claiming the task, or after its external call, leaves it RUNNING forever (https://github.com/RealOrangeOne/django-tasks-db/issues/5); and a task&#95;started receiver that raises marks the task FAILED before it runs, and nothing retries it (https://github.com/RealOrangeOne/django-tasks-db/issues/67). WORKER&#95;FINDINGS pins each history
 
 Ticket not reported.
 
