@@ -22,6 +22,9 @@ report below is updated whenever what it finds changes. A change in what any his
 turns the run red; that is the signal to report it upstream, as a plain issue with a standalone
 reproduction.
 
+This fork is also a canary for pytest-obligation: the Python dependency and the report and
+publish actions deliberately track its `main` branch, including unreleased changes.
+
 To run it locally (Python 3.11 or later, PostgreSQL):
 
 ```bash

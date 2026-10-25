@@ -1,3 +1,4 @@
 # The contract's own dependencies, beside django-tasks-db's dev and postgres groups.
-pytest-obligation[django,exploration]>=0.20.0
+# This fork is a canary for pytest-obligation's main branch, including unreleased changes.
+pytest-obligation[django,exploration] @ git+https://github.com/gigaverse-app/pytest-obligation.git@main#subdirectory=package
 pytest-django>=4.14.0
