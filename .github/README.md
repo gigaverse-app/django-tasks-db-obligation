@@ -263,7 +263,7 @@ Ticket not reported.
 - <code>A-known&#95;gap</code>: Known expected failure
 - **call:** Failed: the worker selects only READY tasks, so a task left RUNNING by a worker that died is never run again (django-tasks-db#5)
 - <code>extra-a task whose worker died is run again by what django-tasks-db runs</code>: Known expected failure
-- **call:** AssertionError: a stranded row (&#x27;223c1595-a546-437a-83f3-8a2596f22700&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;223c1595-a546-437a-83f3-8a2596f22700&#x27; in &#91;&#93;
+- **call:** AssertionError: a stranded row (&#x27;495ddf3c-b3a7-4499-a70e-6b98b5f509df&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;495ddf3c-b3a7-4499-a70e-6b98b5f509df&#x27; in &#91;&#93;
 
 </details>
 
