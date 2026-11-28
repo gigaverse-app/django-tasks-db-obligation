@@ -50,17 +50,22 @@ DATABASE_URL=postgres://postgres:postgres@localhost:5432/postgres python -m pyte
 ## What the contract finds in django-tasks-db's master
 
 <!-- pytest-obligation:start -->
+> [!CAUTION]
+> **The test step failed.**
+>
+> 56 failed contract checks recorded.
+>
+> Contract counts cover only obligation checks; inspect the run log for other failures.
+
 <a href="https://github.com/gigaverse-app/pytest-obligation"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/sticky-banner-dark.svg"><img alt="pytest-obligation: what passed, what is missing, what to fix" src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/sticky-banner-light.svg" width="640"></picture></a>
 
 ### Obligation contract checks
 
 Other pytest tests and workflow steps are not included in these counts.
 
-<p><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-2-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-2-light.svg" width="18" height="36" alt="2 applications" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="69" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-4-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-4-light.svg" width="18" height="36" alt="42 contract checks passed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-2-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-2-light.svg" width="18" height="36" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="57" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-light.svg" width="1" height="36" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="12" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-light.svg" width="18" height="36" alt="18 contract failures" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-8-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-8-light.svg" width="18" height="36" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="50" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="18" height="36" alt="0 blocked checks" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="75" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-4-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-4-light.svg" width="18" height="36" alt="4 coverage gaps" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="72" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="18" height="36" alt="0 rejected bindings" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="73" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-0-light.svg" width="18" height="36" alt="0 skipped tests" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="69" height="36" alt="" align="middle"></picture><br><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/captions-with-skips-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/captions-with-skips-light.svg" width="640" height="34" alt="applications · contract checks passed · contract failures · blocked checks · coverage gaps · rejected bindings · skipped tests" align="middle"></picture></p>
+<p><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-2-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-2-light.svg" width="18" height="36" alt="2 applications" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="69" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-4-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-4-light.svg" width="18" height="36" alt="4 contract checks passed" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="75" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-light.svg" width="1" height="36" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="12" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-5-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-5-light.svg" width="18" height="36" alt="56 contract failures" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-6-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-6-light.svg" width="18" height="36" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="50" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="18" height="36" alt="0 blocked checks" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="75" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-4-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-4-light.svg" width="18" height="36" alt="4 coverage gaps" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="72" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="18" height="36" alt="0 rejected bindings" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="73" height="36" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/neutral-0-light.svg" width="18" height="36" alt="0 skipped tests" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="69" height="36" alt="" align="middle"></picture><br><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/captions-with-skips-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/captions-with-skips-light.svg" width="640" height="34" alt="applications · contract checks passed · contract failures · blocked checks · coverage gaps · rejected bindings · skipped tests" align="middle"></picture></p>
 
-**Failures: 0 unexpected + 18 known expected.** Expected failures are declared by the application and do not fail CI. Review their reasons and evidence below; counts are checks, not distinct product bugs.
-
-**Test step succeeded with known expected failures.**
+**Failures: 51 unexpected + 5 known expected.** Expected failures are declared by the application and do not fail CI. Review their reasons and evidence below; counts are checks, not distinct product bugs.
 
 <details>
 <summary>Application inventory and skipped tests</summary>
@@ -76,11 +81,52 @@ Application name unresolved: tests.obligation.test&#95;worker&#95;contract.TestW
 
 
 <details>
-<summary><strong>django-tasks-db: the wor&#8203;ker&#x27;s ready rows</strong><div align="right"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-3-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-3-light.svg" width="8" height="16" alt="39 passed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-9-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-9-light.svg" width="8" height="16" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-passed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-passed-light.svg" width="37" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="29" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-light.svg" width="1" height="22" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="12" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-light.svg" width="8" height="16" alt="13 failed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-3-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-3-light.svg" width="8" height="16" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-failed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-failed-light.svg" width="33" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="32" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 blocked" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-blocked-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-blocked-light.svg" width="44" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="36" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-1-light.svg" width="8" height="16" alt="1 gaps" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-gaps-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-gaps-light.svg" width="27" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="39" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 rejected" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-rejected-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-rejected-light.svg" width="48" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="34" height="18" alt="" align="middle"></picture></div></summary>
+<summary><strong>django-tasks-db: the wor&#8203;ker&#x27;s ready rows</strong><div align="right"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-1-light.svg" width="8" height="16" alt="1 passed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-passed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-passed-light.svg" width="37" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="37" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/divider-light.svg" width="1" height="22" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="12" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-5-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-5-light.svg" width="8" height="16" alt="51 failed" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/bad-1-light.svg" width="8" height="16" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-failed-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-failed-light.svg" width="33" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="32" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 blocked" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-blocked-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-blocked-light.svg" width="44" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="36" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-1-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/warning-1-light.svg" width="8" height="16" alt="1 gaps" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-gaps-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-gaps-light.svg" width="27" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="39" height="18" alt="" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/good-0-light.svg" width="8" height="16" alt="0 rejected" align="middle"></picture><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-rejected-dark.svg"><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/label-rejected-light.svg" width="48" height="18" alt="" align="middle"></picture><picture><img src="https://raw.githubusercontent.com/gigaverse-app/pytest-obligation/main/docs/assets/report-glyphs/space.svg" width="34" height="18" alt="" align="middle"></picture></div></summary>
 
 Contract contract setup: <code>tests/obligation/test&#95;worker&#95;rows.py:108</code>
 
 Scope: **Scheduled selection and loop**. Covers the declared query and loop checks; does not establish full automatic recovery (profile A).
+
+**51 unexpected failures**
+
+TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+
+<details>
+<summary><strong>51 unexpected failures · diagnostics</strong></summary>
+
+- <code>assert&#95;selection&#95;is&#95;complete</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:RUNNING&#93;</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;blank&#93;</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;whitespace&#93;</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;max&#95;length&#93;</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;unknown&#95;choice&#93;</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;owed&#95;row&#95;bindings&#95;are&#95;production&#95;bound</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;valid&#95;owed&#95;row&#95;leaves&#95;the&#95;selection</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;the&#95;tick&#95;dispatches&#95;owed&#95;rows&#95;in&#95;selection&#95;order</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+- <code>assert&#95;one&#95;poisoned&#95;identity&#95;does&#95;not&#95;stall&#95;the&#95;tick</code>: **Check failed**
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+  - Guarantee: Scheduled selection and loop
+41 further checks are retained in the JSON artifact.
+
+</details>
 
 <details>
 <summary><strong>🔴 Known defects · application-declared expected failures</strong></summary>
@@ -92,8 +138,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;selection&#95;is&#95;complete&#91;status:RUNNING&#93;</code>: Known expected failure
-- **call:** SelectionIncomplete: django-tasks-db: the worker&#x27;s ready rows: the production selection skips a row with status=&#x27;RUNNING&#x27; (states {&#x27;status&#x27;: &#x27;RUNNING&#x27;}), and the production worker, delivered it, moved its states from {&#x27;status&#x27;: &#x27;RUNNING&#x27;} to {&#x27;status&#x27;: &#x27;SUCCESSFUL&#x27;}. Nothing recovers that work after a lost message, so the selection is missing an owed branch. Select the row, or, when it owes nothing, make the worker leave it alone; if the combination is unreachable or another recovery owns it, declare it in excluded&#95;states with the reason
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:RUNNING&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -104,14 +150,14 @@ Ticket not reported.
 <details>
 <summary>4 affected checks · execution evidence</summary>
 
-- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;blank&#93;</code>: Known expected failure
-- **call:** SelectionIncomplete: django-tasks-db: the worker&#x27;s ready rows: the production selection skips a row with status=&#x27;&#x27; (states {&#x27;status&#x27;: &#x27;&#x27;}), and the production worker, delivered it, moved its states from {&#x27;status&#x27;: &#x27;&#x27;} to {&#x27;status&#x27;: &#x27;FAILED&#x27;}. Nothing recovers that work after a lost message, so the selection is missing an owed branch. Select the row, or, when it owes nothing, make the worker leave it alone; if the combination is unreachable or another recovery owns it, declare it in excluded&#95;states with the reason
-- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;whitespace&#93;</code>: Known expected failure
-- **call:** SelectionIncomplete: django-tasks-db: the worker&#x27;s ready rows: the production selection skips a row with status=&#x27; &#x27; (states {&#x27;status&#x27;: &#x27; &#x27;}), and the production worker, delivered it, moved its states from {&#x27;status&#x27;: &#x27; &#x27;} to {&#x27;status&#x27;: &#x27;FAILED&#x27;}. Nothing recovers that work after a lost message, so the selection is missing an owed branch. Select the row, or, when it owes nothing, make the worker leave it alone; if the combination is unreachable or another recovery owns it, declare it in excluded&#95;states with the reason
-- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;max&#95;length&#93;</code>: Known expected failure
-- **call:** SelectionIncomplete: django-tasks-db: the worker&#x27;s ready rows: the production selection skips a row with status=&#x27;xxxxxxxxxx&#x27; (states {&#x27;status&#x27;: &#x27;xxxxxxxxxx&#x27;}), and the production worker, delivered it, moved its states from {&#x27;status&#x27;: &#x27;xxxxxxxxxx&#x27;} to {&#x27;status&#x27;: &#x27;FAILED&#x27;}. Nothing recovers that work after a lost message, so the selection is missing an owed branch. Select the row, or, when it owes nothing, make the worker leave it alone; if the combination is unreachable or another recovery owns it, declare it in excluded&#95;states with the reason
-- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;unknown&#95;choice&#93;</code>: Known expected failure
-- **call:** SelectionIncomplete: django-tasks-db: the worker&#x27;s ready rows: the production selection skips a row with status=&#x27;not-a-memb&#x27; (states {&#x27;status&#x27;: &#x27;not-a-memb&#x27;}), and the production worker, delivered it, moved its states from {&#x27;status&#x27;: &#x27;not-a-memb&#x27;} to {&#x27;status&#x27;: &#x27;FAILED&#x27;}. Nothing recovers that work after a lost message, so the selection is missing an owed branch. Select the row, or, when it owes nothing, make the worker leave it alone; if the combination is unreachable or another recovery owns it, declare it in excluded&#95;states with the reason
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;blank&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;whitespace&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;max&#95;length&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
+- <code>assert&#95;selection&#95;is&#95;complete&#91;status:&#64;unknown&#95;choice&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -122,8 +168,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;one&#95;poisoned&#95;identity&#95;does&#95;not&#95;stall&#95;the&#95;tick</code>: Known expected failure
-- **call:** PoisonDropped: django-tasks-db: the worker&#x27;s ready rows: the poisoned identity is no longer owed after the tick. Isolation must leave a failing identity selectable (or held with backoff), not drop, settle or retire it
+- <code>assert&#95;one&#95;poisoned&#95;identity&#95;does&#95;not&#95;stall&#95;the&#95;tick</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -134,8 +180,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;a&#95;soft&#95;time&#95;limit&#95;ends&#95;the&#95;tick</code>: Known expected failure
-- **call:** StopRequestDropped: django-tasks-db: the worker&#x27;s ready rows: the identity whose step hit the soft time limit is no longer owed after the tick (it raised None). An interrupted step must leave its identity for the next run
+- <code>assert&#95;a&#95;soft&#95;time&#95;limit&#95;ends&#95;the&#95;tick</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -146,8 +192,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-blank&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: the production worker and its handoffs raised InvalidTask(&quot;Queue &#x27;&#x27; is not valid for backend.&quot;) on a database-legal owed row with queue&#95;name-blank (&#x27;&#x27;) after moving it out of the selection, and nothing ends it there: the row is in no terminal state (this contract declares none) and the contract claims no profile J to bound a repeat. Either what moved it expires (a claim, a lease, a backoff) and recovery hands the same row to the same raise, or no selection looks at it again and it stays unfinished. Exclude the row in the selection, end it in a terminal state instead of raising, or bound the retry with profile J
+- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-blank&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -158,8 +204,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-whitespace&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: the production worker and its handoffs raised InvalidTask(&quot;Queue &#x27; &#x27; is not valid for backend.&quot;) on a database-legal owed row with queue&#95;name-whitespace (&#x27; &#x27;) after moving it out of the selection, and nothing ends it there: the row is in no terminal state (this contract declares none) and the contract claims no profile J to bound a repeat. Either what moved it expires (a claim, a lease, a backoff) and recovery hands the same row to the same raise, or no selection looks at it again and it stays unfinished. Exclude the row in the selection, end it in a terminal state instead of raising, or bound the retry with profile J
+- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-whitespace&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -170,8 +216,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-max&#95;length&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: the production worker and its handoffs raised InvalidTask(&quot;Queue &#x27;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&#x27; is not valid for backend.&quot;) on a database-legal owed row with queue&#95;name-max&#95;length (&#x27;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&#x27;) after moving it out of the selection, and nothing ends it there: the row is in no terminal state (this contract declares none) and the contract claims no profile J to bound a repeat. Either what moved it expires (a claim, a lease, a backoff) and recovery hands the same row to the same raise, or no selection looks at it again and it stays unfinished. Exclude the row in the selection, end it in a terminal state inste…
+- <code>assert&#95;database&#95;legal&#95;owed&#95;row&#95;is&#95;handled&#91;task-queue&#95;name-max&#95;length&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -182,8 +228,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-blank&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: a database-legal owed row with queue&#95;name-blank (&#x27;&#x27;) first in selection order stopped the tick before the valid row behind it (the tick raised InvalidTask(&quot;Queue &#x27;&#x27; is not valid for backend.&quot;)). Selection is oldest-first, so that row leads every tick and blocks every later row of its kind
+- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-blank&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -194,8 +240,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-whitespace&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: a database-legal owed row with queue&#95;name-whitespace (&#x27; &#x27;) first in selection order stopped the tick before the valid row behind it (the tick raised InvalidTask(&quot;Queue &#x27; &#x27; is not valid for backend.&quot;)). Selection is oldest-first, so that row leads every tick and blocks every later row of its kind
+- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-whitespace&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -206,8 +252,8 @@ Ticket not reported.
 <details>
 <summary>1 affected checks · execution evidence</summary>
 
-- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-max&#95;length&#93;</code>: Known expected failure
-- **call:** OwedRowNotHandled: django-tasks-db: the worker&#x27;s ready rows: a database-legal owed row with queue&#95;name-max&#95;length (&#x27;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&#x27;) first in selection order stopped the tick before the valid row behind it (the tick raised InvalidTask(&quot;Queue &#x27;xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx&#x27; is not valid for backend.&quot;)). Selection is oldest-first, so that row leads every tick and blocks every later row of its kind
+- <code>assert&#95;inadmissible&#95;owed&#95;row&#95;does&#95;not&#95;block&#95;the&#95;next&#91;task-queue&#95;name-max&#95;length&#93;</code>: Check failed
+- **call:** TypeError: Worker.&#95;&#95;init&#95;&#95;() missing 2 required keyword-only arguments: &#x27;lock&#95;file&#x27; and &#x27;s6&#95;notify&#95;fd&#x27;
 
 </details>
 
@@ -263,7 +309,7 @@ Ticket not reported.
 - <code>A-known&#95;gap</code>: Known expected failure
 - **call:** Failed: the worker selects only READY tasks, so a task left RUNNING by a worker that died is never run again (django-tasks-db#5)
 - <code>extra-a task whose worker died is run again by what django-tasks-db runs</code>: Known expected failure
-- **call:** AssertionError: a stranded row (&#x27;8bd7d08a-bf1f-4a14-ade4-3105fdbaad4f&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;8bd7d08a-bf1f-4a14-ade4-3105fdbaad4f&#x27; in &#91;&#93;
+- **call:** AssertionError: a stranded row (&#x27;b4d0ed16-60f0-4da2-b5ea-9f1ac53ca189&#x27;) was not re-dispatched by the recovery tick: nothing in production re-selects its state, so a dead owner strands it permanently<br>assert &#x27;b4d0ed16-60f0-4da2-b5ea-9f1ac53ca189&#x27; in &#91;&#93;
 
 </details>
 
@@ -369,7 +415,7 @@ Application totals include discovered declarations and reported suites. Skipped 
 
 Application names, quoted reasons and diagnostic values come from application code. Guarantee labels come from pytest-obligation. Results cover collected suites only; passing checks do not rate every test's quality.
 
-Test step (reported): **success**
+Test step (reported): **failure**
 Source: <code>nightly run of tests/obligation against django-tasks-db&#x27;s current master</code>
 
 </details>
