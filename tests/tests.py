@@ -2,9 +2,12 @@ import contextlib
 import copy
 import logging
 import os
+import select
 import signal
+import socket
 import subprocess
 import sys
+import tempfile
 import time
 import uuid
 import warnings
@@ -14,12 +17,14 @@ from contextlib import redirect_stderr
 from datetime import datetime, timedelta
 from functools import partial
 from io import StringIO
+from pathlib import Path
 from typing import Any, cast
 from unittest import mock, skipIf
 
 from django import VERSION
 from django.contrib import admin
 from django.core.exceptions import ImproperlyConfigured, SuspiciousOperation
+from django.core.files import locks
 from django.core.management import CommandError, call_command, execute_from_command_line
 from django.db import connection, connections, transaction
 from django.db.models import QuerySet
@@ -67,10 +72,14 @@ from django_tasks_db.management.commands.prune_db_task_results import (
 )
 from django_tasks_db.models import DBTaskResult, get_date_max
 from django_tasks_db.utils import (
+    IS_WINDOWS,
     exclusive_transaction,
     normalize_uuid,
 )
+from django_tasks_db.worker_status import S6Notify, SDNotify
 from tests import tasks as test_tasks
+
+WORKER_WAIT_TIMEOUT = 5
 
 
 def skipIfInMemoryDB() -> Any:  # noqa:N802
@@ -600,13 +609,7 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
         logger = logging.getLogger("django_tasks_db")
         tasks_logger = logging.getLogger(LOGGER)
 
-        call_command(
-            "db_worker",
-            batch=True,
-            interval=0,
-            startup_delay=False,
-            worker_id=self.worker_id,
-        )
+        self.run_worker(verbosity=None, stdout=StringIO())
 
         self.assertEqual(logger.level, logging.INFO)
         self.assertEqual(tasks_logger.level, logging.INFO)
@@ -623,16 +626,9 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
             with self.subTest(verbosity=verbosity):
                 logger.setLevel(logging.WARNING)
                 tasks_logger.setLevel(logging.ERROR)
-                call_command(
-                    "db_worker",
-                    "--verbosity",
-                    str(verbosity),
-                    batch=True,
-                    interval=0,
-                    startup_delay=False,
-                    worker_id=self.worker_id,
-                    stdout=StringIO(),
-                )
+
+                self.run_worker(verbosity=verbosity, stdout=StringIO())
+
                 self.assertEqual(logger.level, expected_level)
                 self.assertEqual(tasks_logger.level, expected_level)
 
@@ -652,14 +648,7 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
         tasks_logger = logging.getLogger(LOGGER)
         logger.setLevel(logging.WARNING)
 
-        call_command(
-            "db_worker",
-            batch=True,
-            interval=0,
-            startup_delay=False,
-            worker_id=self.worker_id,
-            stdout=StringIO(),
-        )
+        self.run_worker(verbosity=None, stdout=StringIO())
 
         self.assertEqual(logger.level, logging.WARNING)
         self.assertEqual(tasks_logger.level, logging.INFO)
@@ -828,6 +817,54 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
         self.assertEqual(result.return_value, 42)
         self.assertEqual(result.errors, [])
 
+    @contextlib.contextmanager
+    def _capture_worker_signals(
+        self,
+    ) -> Iterator[list[tuple[str, Any, TaskResultStatus]]]:
+        received: list[tuple[str, Any, TaskResultStatus]] = []
+
+        def on_started(sender: Any, task_result: Any, **kwargs: Any) -> None:
+            received.append(("started", sender, task_result.status))
+
+        def on_finished(sender: Any, task_result: Any, **kwargs: Any) -> None:
+            received.append(("finished", sender, task_result.status))
+
+        compat.task_started.connect(on_started, weak=False)
+        compat.task_finished.connect(on_finished, weak=False)
+        try:
+            yield received
+        finally:
+            compat.task_started.disconnect(on_started)
+            compat.task_finished.disconnect(on_finished)
+
+    def test_signals_sent_by_backend_class_on_success(self) -> None:
+        test_tasks.calculate_meaning_of_life.enqueue()
+
+        with self._capture_worker_signals() as received:
+            self.run_worker()
+
+        self.assertEqual(
+            received,
+            [
+                ("started", DatabaseBackend, TaskResultStatus.RUNNING),
+                ("finished", DatabaseBackend, TaskResultStatus.SUCCESSFUL),
+            ],
+        )
+
+    def test_signals_sent_by_backend_class_on_failure(self) -> None:
+        test_tasks.failing_task_value_error.enqueue()
+
+        with self._capture_worker_signals() as received:
+            self.run_worker()
+
+        self.assertEqual(
+            received,
+            [
+                ("started", DatabaseBackend, TaskResultStatus.RUNNING),
+                ("finished", DatabaseBackend, TaskResultStatus.FAILED),
+            ],
+        )
+
     def test_complex_exception(self) -> None:
         result = test_tasks.complex_exception.enqueue()
         self.assertEqual(DBTaskResult.objects.ready().count(), 1)
@@ -978,6 +1015,18 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
                     ["django-admin", "db_worker", "--worker-id", ""]
                 )
         self.assertIn("Worker id must not be empty", output.getvalue())
+
+    def test_bad_s6_notify_fd(self) -> None:
+        output = StringIO()
+        with redirect_stderr(output):
+            with self.assertRaises(SystemExit):
+                execute_from_command_line(
+                    ["django-admin", "db_worker", "--s6-notify-fd", "999"]
+                )
+        self.assertIn(
+            "The handle is invalid" if IS_WINDOWS else "Bad file descriptor",
+            output.getvalue(),
+        )
 
     def test_run_after(self) -> None:
         result = test_tasks.noop_task.using(
@@ -1184,6 +1233,43 @@ class DatabaseBackendWorkerTestCase(TransactionTestCase):
 
         self.assertEqual(db_task_result.status, TaskResultStatus.FAILED)
         self.assertIn("ImportError", db_task_result.traceback)
+
+    @skipIf(IS_WINDOWS, "Unix socket don't work on Windows")
+    def test_sd_notify(self) -> None:
+        assert hasattr(socket, "AF_UNIX")  # placate mypy
+
+        with (
+            tempfile.TemporaryDirectory() as temp_dir,
+            socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM) as sock,
+        ):
+            sock_path = os.path.join(temp_dir, "sd.sock")
+            sock.bind(sock_path)
+            sock.settimeout(1)
+
+            with mock.patch.dict(os.environ, {"NOTIFY_SOCKET": sock_path}):
+                result_1 = test_tasks.noop_task.enqueue()
+                result_2 = test_tasks.noop_task.enqueue()
+
+                self.run_worker()
+
+                messages = []
+                while select.select([sock], [], [], 0)[0]:
+                    messages.append(sock.recv(4096).decode())
+
+        self.assertEqual(
+            messages,
+            [
+                "READY=1",
+                "WATCHDOG=1",
+                f"STATUS=Running {result_1.id}",
+                "STATUS=",
+                "WATCHDOG=1",
+                f"STATUS=Running {result_2.id}",
+                "STATUS=",
+                "WATCHDOG=1",
+                "STOPPING=1",
+            ],
+        )
 
 
 @override_settings(
@@ -1666,10 +1752,12 @@ class DatabaseBackendPruneTaskResultsTestCase(TransactionTestCase):
 )
 @skipIfInMemoryDB()
 class DatabaseWorkerProcessTestCase(TransactionTestCase):
-    WORKER_STARTUP_TIME = 1
-
     def setUp(self) -> None:
         self.processes: list[subprocess.Popen] = []
+
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.temp_dir = Path(temp_dir.name)
 
     def tearDown(self) -> None:
         # Try n times to kill any remaining child processes
@@ -1687,12 +1775,21 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         *,
         debug: bool = False,
         worker_id: str | None = None,
+        lock_file: Path | None = None,
+        wait: bool = True,
+        popen_kwargs: dict | None = None,
     ) -> subprocess.Popen:
         if args is None:
             args = []
 
         if worker_id is None:
             worker_id = get_random_string(32)
+
+        if lock_file is None:
+            lock_file = self.temp_dir / f"{get_random_string(8)}.lock"
+
+        if popen_kwargs is None:
+            popen_kwargs = {}
 
         p = subprocess.Popen(
             [
@@ -1705,6 +1802,10 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
                 "--no-startup-delay",
                 "--worker-id",
                 worker_id,
+                "--lock-file",
+                str(lock_file),
+                "--interval",
+                "0",
                 *args,
             ],
             stdout=None if debug else subprocess.PIPE,
@@ -1715,9 +1816,56 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
                 "IN_TEST": "",
             },
             text=True,
+            **popen_kwargs,
         )
         self.processes.append(p)
+
+        deadline = time.time() + WORKER_WAIT_TIMEOUT
+
+        while wait and p.poll() is None:
+            if lock_file.exists():
+                try:
+                    call_command("db_worker_healthcheck", lock_file, stdout=StringIO())
+                except CommandError:
+                    pass
+                else:
+                    break
+
+            if time.time() >= deadline:
+                self.fail(
+                    f"{lock_file} was not locked within {WORKER_WAIT_TIMEOUT} seconds"
+                )
+            time.sleep(0.1)
+
         return p
+
+    def wait_for_finished(self, result: Any) -> None:
+        deadline = time.time() + WORKER_WAIT_TIMEOUT
+
+        while True:
+            result.refresh()
+            if result.status in [TaskResultStatus.SUCCESSFUL, TaskResultStatus.FAILED]:
+                return
+
+            if time.time() >= deadline:
+                self.fail(
+                    f"Task {result.id} was not completed within {WORKER_WAIT_TIMEOUT} seconds"
+                )
+            time.sleep(0.1)
+
+    def wait_for_running(self, result: Any) -> None:
+        deadline = time.time() + WORKER_WAIT_TIMEOUT
+
+        while True:
+            result.refresh()
+            if result.status != TaskResultStatus.READY:
+                return
+
+            if time.time() >= deadline:
+                self.fail(
+                    f"Task {result.id} was not running within {WORKER_WAIT_TIMEOUT} seconds"
+                )
+            time.sleep(0.1)
 
     def test_run_subprocess(self) -> None:
         result = test_tasks.noop_task.enqueue()
@@ -1731,18 +1879,16 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
 
         self.assertEqual(result.status, TaskResultStatus.SUCCESSFUL)
 
-    @skipIf(sys.platform == "win32", "Terminate is always forceful on Windows")
+    @skipIf(IS_WINDOWS, "Terminate is always forceful on Windows")
     def test_interrupt_no_tasks(self) -> None:
         process = self.start_worker()
 
-        time.sleep(self.WORKER_STARTUP_TIME)
-
         process.terminate()
 
-        process.wait(timeout=0.5)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
         self.assertEqual(process.returncode, 0)
 
-    @skipIf(sys.platform == "win32", "Cannot emulate CTRL-C on Windows")
+    @skipIf(IS_WINDOWS, "Cannot emulate CTRL-C on Windows")
     def test_interrupt_signals(self) -> None:
         for sig in [
             signal.SIGINT,  # ctrl-c
@@ -1752,22 +1898,18 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
                 result = test_tasks.sleep_for.enqueue(2)
                 self.assertEqual(DBTaskResult.objects.get(id=result.id).worker_ids, [])
 
-                self.assertGreater(result.args[0], self.WORKER_STARTUP_TIME)
+                self.assertLess(result.args[0], WORKER_WAIT_TIMEOUT)
 
                 process = self.start_worker()
 
-                # Make sure the task is running by now
-                time.sleep(self.WORKER_STARTUP_TIME)
-
-                result.refresh()
-                self.assertEqual(result.status, TaskResultStatus.RUNNING)
+                self.wait_for_running(result)
                 self.assertNotEqual(
                     DBTaskResult.objects.get(id=result.id).worker_ids, []
                 )
 
                 process.send_signal(sig)
 
-                process.wait(timeout=2)
+                process.wait(timeout=WORKER_WAIT_TIMEOUT)
 
                 self.assertEqual(process.returncode, 0)
 
@@ -1775,7 +1917,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
 
                 self.assertEqual(result.status, TaskResultStatus.SUCCESSFUL)
 
-    @skipIf(sys.platform == "win32", "Cannot emulate CTRL-C on Windows")
+    @skipIf(IS_WINDOWS, "Cannot emulate CTRL-C on Windows")
     def test_repeat_ctrl_c(self) -> None:
         result = test_tasks.hang.enqueue()
         self.assertEqual(DBTaskResult.objects.get(id=result.id).worker_ids, [])
@@ -1784,10 +1926,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
 
         process = self.start_worker(worker_id=worker_id)
 
-        # Make sure the task is running by now
-        time.sleep(self.WORKER_STARTUP_TIME)
-
-        result.refresh()
+        self.wait_for_running(result)
         self.assertEqual(result.status, TaskResultStatus.RUNNING)
         self.assertEqual(DBTaskResult.objects.get(id=result.id).worker_ids, [worker_id])
 
@@ -1802,7 +1941,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
 
         process.send_signal(signal.SIGINT)
 
-        process.wait(timeout=2)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
 
         self.assertEqual(process.returncode, 0)
 
@@ -1810,7 +1949,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         self.assertEqual(result.status, TaskResultStatus.FAILED)
         self.assertEqual(result.errors[0].exception_class, SystemExit)
 
-    @skipIf(sys.platform == "win32", "Windows doesn't support SIGKILL")
+    @skipIf(IS_WINDOWS, "Windows doesn't support SIGKILL")
     def test_kill(self) -> None:
         # Required to keep mypy happy
         assert hasattr(signal, "SIGKILL")
@@ -1819,15 +1958,12 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
 
         process = self.start_worker()
 
-        # Make sure the task is running by now
-        time.sleep(self.WORKER_STARTUP_TIME)
-
-        result.refresh()
+        self.wait_for_running(result)
         self.assertEqual(result.status, TaskResultStatus.RUNNING)
 
         process.kill()
 
-        process.wait(timeout=2)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
 
         self.assertEqual(process.returncode, -signal.SIGKILL)
 
@@ -1840,7 +1976,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         result = test_tasks.failing_task_system_exit.enqueue()
 
         process = self.start_worker(["--batch"])
-        process.wait(timeout=2)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
 
         self.assertEqual(process.returncode, 0)
 
@@ -1852,7 +1988,7 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         result = test_tasks.failing_task_keyboard_interrupt.enqueue()
 
         process = self.start_worker(["--batch"])
-        process.wait(timeout=2)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
 
         self.assertEqual(process.returncode, 0)
 
@@ -1864,12 +2000,11 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         results = [test_tasks.sleep_for.enqueue(0.1) for _ in range(10)]
 
         for _ in range(3):
-            self.start_worker(["--batch"])
-
-        time.sleep(self.WORKER_STARTUP_TIME)
+            # Don't wait for each worker, so they run concurrently
+            self.start_worker(["--batch"], wait=False)
 
         for process in self.processes:
-            process.wait(timeout=5)
+            process.wait(timeout=WORKER_WAIT_TIMEOUT)
             self.assertIsNotNone(process.returncode)
 
         for result in results:
@@ -1886,6 +2021,137 @@ class DatabaseWorkerProcessTestCase(TransactionTestCase):
         for result in results:
             # Running and successful
             self.assertEqual(all_output.count(result.id), 2)
+
+    def test_lock_file_held_while_running(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        self.start_worker(lock_file=lock_file)
+
+        call_command("db_worker_healthcheck", lock_file, stdout=StringIO())
+
+    def test_lock_file_released_on_graceful_exit(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        process = self.start_worker(["--batch"], lock_file=lock_file)
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
+
+        self.assertEqual(process.returncode, 0)
+        self.assertFalse(lock_file.is_file())
+
+    def test_lock_file_released_on_kill(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        process = self.start_worker(lock_file=lock_file)
+
+        process.kill()
+        process.wait(timeout=WORKER_WAIT_TIMEOUT)
+
+        with self.assertRaisesMessage(CommandError, "No worker is running"):
+            call_command("db_worker_healthcheck", lock_file)
+
+    def test_lock_file_is_exclusive(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+
+        self.start_worker(lock_file=lock_file)
+
+        second = self.start_worker(lock_file=lock_file, wait=False)
+        output, _ = second.communicate(timeout=WORKER_WAIT_TIMEOUT)
+
+        self.assertEqual(second.returncode, 1)
+        self.assertIn("Failed to mark worker as started", output)
+
+        call_command("db_worker_healthcheck", lock_file, stdout=StringIO())
+
+    @skipIf(
+        IS_WINDOWS,
+        "Cannot read locked files from another process on Windows",
+    )
+    def test_lock_file_contains_task_id(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        result = test_tasks.sleep_for.enqueue(1)
+
+        self.start_worker(lock_file=lock_file)
+
+        self.wait_for_running(result)
+
+        self.assertEqual(lock_file.read_text(), f"{result.id}")
+
+        self.wait_for_finished(result)
+
+        self.assertEqual(lock_file.read_text(), "")
+
+    def test_lock_file_touched(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+
+        test_tasks.sleep_for.enqueue(0.5)
+        second_result = test_tasks.sleep_for.enqueue(0.5)
+
+        self.start_worker(["--batch"], lock_file=lock_file)
+        worker_started = time.time()
+
+        self.wait_for_running(second_result)
+
+        # A ping will have occurred to retrieve the second result,
+        # so the mtime will be newer than it was when the worker first started
+        self.assertGreater(lock_file.stat().st_mtime, worker_started)
+
+    @skipIf(
+        IS_WINDOWS,
+        "Requires file descriptors",
+    )
+    def test_s6_ready(self) -> None:
+        read_fd, write_fd = os.pipe()
+        self.addCleanup(os.close, read_fd)
+
+        self.start_worker(
+            ["--batch", "--s6-notify-fd", str(write_fd)],
+            popen_kwargs={"pass_fds": [write_fd]},
+        )
+
+        self.assertEqual(os.read(read_fd, 16), b"\n")
+
+
+class DatabaseWorkerHealthcheckTestCase(SimpleTestCase):
+    healthcheck = staticmethod(
+        partial(call_command, "db_worker_healthcheck", verbosity=0)
+    )
+
+    def setUp(self) -> None:
+        super().setUp()
+
+        temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(temp_dir.cleanup)
+        self.temp_dir = Path(temp_dir.name)
+
+    def test_missing_file(self) -> None:
+        with self.assertRaisesMessage(CommandError, "Lock file does not exist"):
+            self.healthcheck(self.temp_dir / "worker.lock")
+
+    def test_unlocked_file(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        lock_file.touch()
+
+        with self.assertRaisesMessage(CommandError, "No worker is running"):
+            self.healthcheck(lock_file, stdout=StringIO())
+
+    def test_locked_file(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+        with lock_file.open("ab") as f:
+            locks.lock(f, locks.LOCK_EX)
+            self.healthcheck(lock_file, stdout=StringIO())
+
+        with self.assertRaisesMessage(CommandError, "No worker is running"):
+            self.healthcheck(lock_file, stdout=StringIO())
+
+    def test_old_file(self) -> None:
+        lock_file = self.temp_dir / "worker.lock"
+
+        with lock_file.open("ab") as f:
+            locks.lock(f, locks.LOCK_EX)
+
+            os.utime(lock_file, (time.time(), time.time() - 5))
+
+            self.healthcheck(lock_file, max_age=10, stdout=StringIO())
+
+            with self.assertRaisesMessage(CommandError, "Lock file is too old"):
+                self.healthcheck(lock_file, max_age=1, stdout=StringIO())
 
 
 class CompatTestCase(SimpleTestCase):
@@ -1985,3 +2251,95 @@ class AdminTestCase(TestCase):
         result = self.admin.display_run_after(db_task_result)
 
         self.assertEqual(result, expected_run_after)
+
+
+@skipIf(IS_WINDOWS, "Requires unix sockets")
+class SDNotifyTestCase(SimpleTestCase):
+    def setUp(self) -> None:
+        assert hasattr(socket, "AF_UNIX")  # placate mypy
+
+        self.temp_dir = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp_dir.cleanup)
+        self.socket_path = os.path.join(self.temp_dir.name, "sd.sock")
+
+        self.socket = socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM)
+        self.addCleanup(self.socket.close)
+        self.socket.bind(self.socket_path)
+        self.socket.settimeout(1)
+
+        self.sd_notify = SDNotify(self.socket_path)
+
+    def get_messages(self) -> list[str]:
+        messages = []
+
+        while select.select([self.socket], [], [], 0)[0]:
+            messages.append(self.socket.recv(4096).decode())
+
+        return messages
+
+    def test_no_messages_on_start(self) -> None:
+        self.assertEqual(self.get_messages(), [])
+
+    def test_ready(self) -> None:
+        self.assertTrue(self.sd_notify.ready())
+        self.assertEqual(self.get_messages(), ["READY=1"])
+
+    def test_stopping(self) -> None:
+        self.assertTrue(self.sd_notify.stopping())
+        self.assertEqual(self.get_messages(), ["STOPPING=1"])
+
+    def test_watchdog(self) -> None:
+        self.assertTrue(self.sd_notify.watchdog())
+        self.assertEqual(self.get_messages(), ["WATCHDOG=1"])
+
+    def test_status(self) -> None:
+        status = get_random_string(10)
+        self.assertTrue(self.sd_notify.status(status))
+        self.assertEqual(self.get_messages(), [f"STATUS={status}"])
+
+    def test_repeat_calls_buffer(self) -> None:
+        for i in range(3):
+            self.assertTrue(self.sd_notify.status(str(i)))
+
+        self.assertEqual(self.get_messages(), ["STATUS=0", "STATUS=1", "STATUS=2"])
+
+    def test_abstract_namespace_socket(self) -> None:
+        self.assertTrue(
+            SDNotify(f"@{self.socket_path}").socket_address.startswith("\0")
+        )
+
+    def test_missing_socket(self) -> None:
+        os.remove(self.socket_path)
+
+        with self.assertLogs("django_tasks_db") as captured_logs:
+            self.assertFalse(self.sd_notify.watchdog())
+
+        self.assertEqual(len(captured_logs.output), 1)
+        self.assertIn("Failed to send to sd_notify socket", captured_logs.output[0])
+        self.assertIn("FileNotFoundError", captured_logs.output[0])
+
+
+@skipIf(IS_WINDOWS, "Requires file descriptors")
+class S6NotifyTestCase(SimpleTestCase):
+    def setUp(self) -> None:
+        self.read_fd, self.write_fd = os.pipe()
+
+        self.addCleanup(os.close, self.read_fd)
+
+    def test_ready_writes_newline_and_closes(self) -> None:
+        s6 = S6Notify(self.write_fd)
+        self.assertTrue(s6.ready())
+        self.assertEqual(os.read(self.read_fd, 16), b"\n")
+        self.assertEqual(os.read(self.read_fd, 16), b"")
+
+    def test_ready_multiple_times(self) -> None:
+        s6 = S6Notify(self.write_fd)
+
+        self.assertTrue(s6.ready())
+
+        with self.assertLogs("django_tasks_db"):
+            self.assertFalse(s6.ready())
+
+    def test_bad_fd(self) -> None:
+        with self.assertLogs("django_tasks_db"):
+            self.assertFalse(S6Notify(9999).ready())

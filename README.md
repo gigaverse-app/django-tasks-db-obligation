@@ -47,6 +47,28 @@ You can run the `db_worker` command to run tasks as they're created. Check the `
 
 In `DEBUG`, the worker will automatically reload when code is changed (or by using `--reload`). This is not recommended in production environments as tasks may not be stopped cleanly.
 
+#### Worker health
+
+It may be useful in your environment to check the health of the worker, more so than just whether the process is running.
+
+##### Lock file
+
+A lock file can be provided using `--lock-file`. This file will be locked exclusively whilst the worker is running. Multiple workers cannot use the same lock file. The lock file will be deleted when the worker exits successfully. It's recommended to store the lock file in-memory (eg `tmpfs`) to reduce writes on persistent storage.
+
+The lock file's modified time will be updated (`touch`) each time the worker checks for a task. This can be used to indicate that the loop is still running.
+
+When a worker is running a task, the task's id is written to the text file. This does not work on Windows.
+
+To check the health of the worker using the lock file, use the `db_worker_healthcheck` management command, and provide the lock file's path. You can also pass `--max-age` to ensure the worker has `touch`'d the lock file in at least this many seconds.
+
+##### `sd_notify`
+
+`db_worker` supports the [`sd_notify(3)`](https://www.freedesktop.org/software/systemd/man/254/sd_pid_notify.html) API, for communicating worker status to `systemd` (or other compatible tools). Set `Notify=true` in your `.service` to enable.
+
+##### S6 startup notifications
+
+`db_worker` supports S6's [service startup notifications](https://skarnet.org/software/s6/notifywhenup.html) API. Add the file descriptor number to the service's `notification-fd` file, and pass it to `--s6-notify-fd`. S6 will now be told once the worker has started.
+
 ### Pruning old tasks
 
 After a while, tasks may start to build up in your database. This can be managed using the `prune_db_task_results` management command, which deletes completed tasks according to the given retention policy. Check the `--help` for the available options.

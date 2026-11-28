@@ -6,6 +6,7 @@ import signal
 import sys
 import time
 from argparse import ArgumentParser, ArgumentTypeError, BooleanOptionalAction
+from pathlib import Path
 from types import FrameType
 
 from django.conf import settings
@@ -29,6 +30,7 @@ from django_tasks_db.compat import (
 )
 from django_tasks_db.models import DBTaskResult
 from django_tasks_db.utils import exclusive_transaction, is_locked_database_exception
+from django_tasks_db.worker_status import WorkerStatus
 
 logger = logging.getLogger("django_tasks_db")
 
@@ -45,6 +47,8 @@ class Worker:
         max_tasks: int | None,
         worker_id: str,
         excluded_queue_names: list[str],
+        lock_file: Path | None,
+        s6_notify_fd: int | None,
     ):
         self.queue_names = queue_names
         self.process_all_queues = "*" in queue_names
@@ -60,6 +64,13 @@ class Worker:
         self._run_tasks = 0
 
         self.worker_id = worker_id
+
+        self.status = WorkerStatus(
+            worker_id=self.worker_id,
+            lock_file=lock_file,
+            sd_socket_path=os.environ.get("NOTIFY_SOCKET"),
+            s6_notify_fd=s6_notify_fd,
+        )
 
     def shutdown(self, signum: int, frame: FrameType | None) -> None:
         if not self.running:
@@ -93,15 +104,26 @@ class Worker:
             signal.signal(signal.SIGQUIT, signal.SIG_DFL)
 
     def run(self) -> None:
+        if self.startup_delay and self.interval:
+            # Add a random small delay before starting to avoid a thundering herd
+            time.sleep(random.random())  # noqa: S311
+
+        if not self.status.mark_started():
+            raise CommandError(
+                "Failed to mark worker as started - is another worker already running?"
+            )
+
+        self._run()
+
+        if not self.status.mark_stopped():
+            raise CommandError("Failed to mark worker as stopped.")
+
+    def _run(self) -> None:
         logger.info(
             "Starting worker worker_id=%s queues=%s",
             self.worker_id,
             ",".join(self.queue_names),
         )
-
-        if self.startup_delay and self.interval:
-            # Add a random small delay before starting to avoid a thundering herd
-            time.sleep(random.random())  # noqa: S311
 
         while self.running:
             # Check for dropped/expired connections right after waking up
@@ -130,6 +152,8 @@ class Worker:
                         task_result = None
                     else:
                         raise
+
+            self.status.ping()
 
             if task_result is not None:
                 self.run_task(task_result)
@@ -166,10 +190,11 @@ class Worker:
         """
         try:
             self.running_task = True
+            self.status.mark_running_task(str(db_task_result.id))
             task = db_task_result.task
             task_result = db_task_result.task_result
 
-            backend_type = task.get_backend()
+            backend_type = type(task.get_backend())
 
             task_started.send(sender=backend_type, task_result=task_result)
             if task.takes_context:
@@ -206,15 +231,17 @@ class Worker:
         finally:
             self.running_task = False
             self._run_tasks += 1
+            self.status.mark_not_running_task()
 
 
 def valid_backend_name(val: str) -> str:
     try:
         backend = task_backends[val]
     except InvalidTaskBackend as e:
-        raise ArgumentTypeError(e.args[0]) from e
-    if not isinstance(backend, DatabaseBackend):
-        raise ArgumentTypeError(f"Backend '{val}' is not a database backend")
+        raise ArgumentTypeError(str(e)) from e
+    else:
+        if not isinstance(backend, DatabaseBackend):
+            raise ArgumentTypeError(f"Backend '{val}' is not a database backend")
     return val
 
 
@@ -232,6 +259,15 @@ def valid_max_tasks(val: str) -> int:
     if num <= 0:
         raise ArgumentTypeError("Must be greater than zero")
     return num
+
+
+def validate_fd(val: str) -> int:
+    fd = int(val)
+    try:
+        os.fstat(fd)
+    except OSError as e:
+        raise ArgumentTypeError(str(e)) from None
+    return fd
 
 
 def validate_worker_id(val: str) -> str:
@@ -308,6 +344,20 @@ class Command(BaseCommand):
             help="Worker id. MUST be unique across worker pool (default: auto-generate)",
             default=get_random_string(32),
         )
+        parser.add_argument(
+            "--lock-file",
+            nargs="?",
+            default=None,
+            type=Path,
+            help="If provided, hold a lock on this file while the worker is running. Can be used with the db_worker_healthcheck command.",
+        )
+        parser.add_argument(
+            "--s6-notify-fd",
+            nargs="?",
+            default=None,
+            type=validate_fd,
+            help="File descriptor for S6's notification channel.",
+        )
 
     def configure_logging(self, verbosity: int | None) -> None:
         tasks_logger = logging.getLogger(TASKS_LOGGER)
@@ -344,6 +394,8 @@ class Command(BaseCommand):
         max_tasks: int | None,
         worker_id: str,
         exclude_queues: str,
+        lock_file: Path | None,
+        s6_notify_fd: int | None,
         **options: dict,
     ) -> None:
         self.configure_logging(verbosity)
@@ -369,6 +421,8 @@ class Command(BaseCommand):
             max_tasks=max_tasks,
             worker_id=worker_id,
             excluded_queue_names=excluded_queue_names,
+            lock_file=lock_file,
+            s6_notify_fd=s6_notify_fd,
         )
 
         if reload:
